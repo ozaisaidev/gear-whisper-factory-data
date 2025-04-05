@@ -1,6 +1,6 @@
 
 import AppLayout from '@/components/AppLayout';
-import { Mic, Waveform, Volume2, Radio } from 'lucide-react';
+import { Mic, AudioWaveform, Volume2, Radio } from 'lucide-react';
 import { motion, Variants } from 'framer-motion';
 
 const AudioAnalysis = () => {
@@ -63,7 +63,7 @@ const AudioAnalysis = () => {
             className="industrial-card p-6 lg:col-span-2"
           >
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Waveform className="text-industrial-blue" size={20} />
+              <AudioWaveform className="text-industrial-blue" size={20} />
               <span>Waveform Analysis</span>
             </h2>
             <div className="bg-industrial-light/50 rounded-lg h-64 flex items-center justify-center">
