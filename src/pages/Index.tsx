@@ -16,7 +16,7 @@ const Index = () => {
   }, [navigate]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-industrial-light to-white">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-white">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -28,8 +28,13 @@ const Index = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}
         >
-          <h1 className="text-4xl font-bold text-industrial-blue mb-4">Gear Whisper</h1>
-          <p className="text-xl text-industrial-gray mb-8">Factory Data Entry Dashboard</p>
+          <div className="mb-6 flex justify-center">
+            <div className="bg-modern-primary/10 p-4 rounded-full">
+              <div className="text-modern-primary text-4xl">⚡</div>
+            </div>
+          </div>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">Gear Whisper</h1>
+          <p className="text-xl text-gray-500 mb-8">Factory Data Entry Dashboard</p>
         </motion.div>
         
         <motion.div
@@ -38,7 +43,7 @@ const Index = () => {
           transition={{ delay: 0.8, duration: 1 }}
           className="flex justify-center"
         >
-          <div className="w-10 h-10 relative">
+          <div className="w-12 h-12 relative">
             <motion.div
               animate={{ 
                 scale: [1, 1.2, 1],
@@ -49,12 +54,12 @@ const Index = () => {
                 duration: 1.5,
                 ease: "easeInOut"
               }}
-              className="absolute inset-0 rounded-full bg-industrial-accent/30"
+              className="absolute inset-0 rounded-full bg-modern-primary/30"
             />
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-              className="w-full h-full border-t-2 border-r-2 border-industrial-blue rounded-full"
+              className="w-full h-full border-t-2 border-r-2 border-modern-primary rounded-full"
             />
           </div>
         </motion.div>

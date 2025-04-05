@@ -63,15 +63,31 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-        industrial: {
-          blue: '#1E4B8F',
-          gray: '#5A6978',
-          light: '#E5EBF1',
-          accent: '#4A90E2',
-          highlight: '#FFC107',
-          error: '#E53935',
-          success: '#43A047'
-        }
+                industrial: {
+                  blue: '#1E4B8F',
+                  gray: '#5A6978',
+                  light: '#E5EBF1',
+                  accent: '#4A90E2',
+                  highlight: '#FFC107',
+                  error: '#E53935',
+                  success: '#43A047'
+                },
+                // New modern color palette based on the provided image
+                modern: {
+                  primary: '#5B63FE',   // The vibrant blue/purple from active menu
+                  secondary: '#4ECC3E',  // The green from the charts
+                  dark: '#1E2029',     // Dark background (sidebar)
+                  light: '#FFFFFF',    // Light background (cards)
+                  gray: '#9DA3AF',     // Muted text color
+                  success: '#4ECC3E',  // Green success indicators
+                  warning: '#FFC107',  // Yellow star highlights
+                  danger: '#FF5252',   // For errors and alerts
+                  chart: {
+                    blue: '#5B63FE',
+                    green: '#4ECC3E',
+                    yellow: '#FFD166'
+                  }
+                }
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
