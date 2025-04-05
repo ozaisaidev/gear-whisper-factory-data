@@ -1,7 +1,7 @@
 
 import AppLayout from '@/components/AppLayout';
-import { Mic, WaveformCircle, Volume2, Radio } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Mic, Waveform, Volume2, Radio } from 'lucide-react';
+import { motion, Variants } from 'framer-motion';
 
 const AudioAnalysis = () => {
   const cardVariants = {
@@ -17,7 +17,7 @@ const AudioAnalysis = () => {
     })
   };
 
-  const waveformVariants = {
+  const waveformVariants: Variants = {
     animate: {
       transition: {
         staggerChildren: 0.05
@@ -25,7 +25,7 @@ const AudioAnalysis = () => {
     }
   };
 
-  const waveBarVariants = {
+  const waveBarVariants: Variants = {
     initial: { height: 10 },
     animate: { 
       height: [10, 30, 10],
@@ -33,7 +33,7 @@ const AudioAnalysis = () => {
         repeat: Infinity,
         duration: 0.8,
         ease: "easeInOut",
-        repeatType: "reverse"
+        repeatType: "mirror"  // Using "mirror" which is a valid value
       }
     }
   };
@@ -63,7 +63,7 @@ const AudioAnalysis = () => {
             className="industrial-card p-6 lg:col-span-2"
           >
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <WaveformCircle className="text-industrial-blue" size={20} />
+              <Waveform className="text-industrial-blue" size={20} />
               <span>Waveform Analysis</span>
             </h2>
             <div className="bg-industrial-light/50 rounded-lg h-64 flex items-center justify-center">
