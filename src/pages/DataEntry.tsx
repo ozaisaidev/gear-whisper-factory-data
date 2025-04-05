@@ -3,8 +3,11 @@ import AppLayout from '@/components/AppLayout';
 import DataEntryForm from '@/components/DataEntryForm';
 import { Gauge, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const DataEntry = () => {
+  const navigate = useNavigate();
+
   return (
     <AppLayout>
       <main className="container mx-auto px-6 py-8">
@@ -35,7 +38,10 @@ const DataEntry = () => {
           </div>
           <DataEntryForm />
           <div className="mt-6 flex justify-end">
-            <button className="button-primary flex items-center">
+            <button 
+              className="button-primary flex items-center"
+              onClick={() => navigate('/view-data')}
+            >
               <span>View Data</span>
               <ArrowRight size={16} className="ml-2" />
             </button>

@@ -11,7 +11,7 @@ const Header = () => {
             <Gauge size={24} className="text-modern-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Gear Whisper</h1>
+            <h1 className="text-xl font-bold text-gray-900">Motor Analytics</h1>
             <p className="text-xs text-gray-500">Factory Data Entry Dashboard</p>
           </div>
         </div>

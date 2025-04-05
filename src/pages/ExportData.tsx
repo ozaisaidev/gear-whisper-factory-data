@@ -1,6 +1,6 @@
 
 import AppLayout from '@/components/AppLayout';
-import { FileText, Download, Cloud, Database, Upload } from 'lucide-react';
+import { FileText, Download, Database, Upload } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
@@ -69,63 +69,13 @@ const ExportData = () => {
             </Button>
           </motion.div>
           
-          {/* Export to OneDrive */}
+          {/* Export to S3 */}
           <motion.div
             custom={2}
             initial="hidden"
             animate="visible"
             variants={cardVariants}
-            className="industrial-card p-6"
-            whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-          >
-            <h2 className="text-lg font-semibold mb-4 text-industrial-blue flex items-center gap-2">
-              <Cloud className="text-blue-500" size={20} />
-              Export to OneDrive
-            </h2>
-            <p className="text-industrial-gray mb-6">Upload your motor data directly to Microsoft OneDrive</p>
-            
-            <div className="space-y-4 mb-6">
-              <div>
-                <label htmlFor="fileName" className="label-text">File Name</label>
-                <input 
-                  id="fileName" 
-                  type="text" 
-                  className="input-field w-full" 
-                  placeholder="motor_data"
-                  defaultValue="motor_data"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="fileType" className="label-text">File Type</label>
-                <select id="fileType" className="input-field w-full">
-                  <option>Excel (.xlsx)</option>
-                  <option>CSV (.csv)</option>
-                </select>
-              </div>
-              
-              <div className="flex items-center">
-                <label className="inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" />
-                  <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
-                  <span className="ml-3 text-sm text-industrial-gray">Append to existing file</span>
-                </label>
-              </div>
-            </div>
-            
-            <Button className="w-full bg-blue-500 hover:bg-blue-600 gap-2">
-              <Upload size={18} />
-              Upload to OneDrive
-            </Button>
-          </motion.div>
-          
-          {/* Export to S3 */}
-          <motion.div
-            custom={3}
-            initial="hidden"
-            animate="visible"
-            variants={cardVariants}
-            className="industrial-card p-6"
+            className="industrial-card p-6 col-span-1 md:col-span-2"
             whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
           >
             <h2 className="text-lg font-semibold mb-4 text-industrial-blue flex items-center gap-2">

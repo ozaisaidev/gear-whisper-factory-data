@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   SidebarProvider, 
   Sidebar, 
@@ -14,7 +14,7 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel
 } from '@/components/ui/sidebar';
-import { Database, BarChart2, FileText, Mic, LogIn, Home, User } from 'lucide-react';
+import { Database, FileText, Mic, LogIn, Home, User, LogOut } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 interface AppLayoutProps {
@@ -23,6 +23,8 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   
   const menuItems = [
     {
@@ -38,12 +40,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
       color: 'text-green-400'
     },
     {
-      name: 'Analytics',
-      icon: BarChart2,
-      path: '/analytics',
-      color: 'text-modern-primary'
-    },
-    {
       name: 'Audio Analysis',
       icon: Mic,
       path: '/audio-analysis',
@@ -54,6 +50,12 @@ export default function AppLayout({ children }: AppLayoutProps) {
       icon: FileText,
       path: '/export-data',
       color: 'text-sky-400'
+    },
+    {
+      name: 'View Data',
+      icon: Database,
+      path: '/view-data',
+      color: 'text-teal-400'
     }
   ];
 
@@ -70,6 +72,14 @@ export default function AppLayout({ children }: AppLayoutProps) {
     })
   };
 
+  const handleLoginClick = () => {
+    if (isLoggedIn) {
+      setIsLoggedIn(false);
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-gray-50">
@@ -83,7 +93,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 className="text-center"
               >
                 <h1 className="text-xl font-bold text-white flex items-center gap-2">
-                  <span className="text-modern-primary">⚡</span> Gear Whisper
+                  <span className="text-modern-primary">⚡</span> Motor Analytics
                 </h1>
                 <p className="text-xs text-gray-400 mt-1">Factory Data Dashboard</p>
               </motion.div>
@@ -141,12 +151,21 @@ export default function AppLayout({ children }: AppLayoutProps) {
                   >
                     <SidebarMenuItem>
                       <SidebarMenuButton asChild className="text-gray-400 hover:text-white">
-                        <button className="w-full flex items-center group">
+                        <button 
+                          className="w-full flex items-center group"
+                          onClick={handleLoginClick}
+                        >
                           <div className="relative">
-                            <User className="text-modern-primary group-hover:scale-110 transition-transform" />
-                            <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full"></span>
+                            {isLoggedIn ? (
+                              <LogOut className="text-red-400 group-hover:scale-110 transition-transform" />
+                            ) : (
+                              <User className="text-modern-primary group-hover:scale-110 transition-transform" />
+                            )}
+                            {isLoggedIn && (
+                              <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full"></span>
+                            )}
                           </div>
-                          <span>Log In</span>
+                          <span>{isLoggedIn ? 'Log Out' : 'Log In'}</span>
                         </button>
                       </SidebarMenuButton>
                     </SidebarMenuItem>

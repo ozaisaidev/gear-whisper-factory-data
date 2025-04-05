@@ -23,7 +23,7 @@ const Dashboard = () => {
       </main>
       <footer className="bg-modern-dark text-white py-4 mt-8">
         <div className="container mx-auto px-6 text-center text-sm">
-          <p>© 2025 Gear Whisper Factory Data Entry Dashboard</p>
+          <p>© 2025 Motor Analytics Factory Data Entry Dashboard</p>
         </div>
       </footer>
     </div>
