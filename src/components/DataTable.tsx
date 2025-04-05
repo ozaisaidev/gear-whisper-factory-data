@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
-import { Edit, Trash2, Eye, FileDown, ChevronDown, ChevronUp, Search } from 'lucide-react';
+import { Edit, Trash2, FileDown, ChevronDown, ChevronUp, Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 interface MotorData {
   id: string;
@@ -55,6 +57,7 @@ const mockData: MotorData[] = [
 ];
 
 const DataTable = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState<MotorData[]>(mockData);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<keyof MotorData>('timestamp');
@@ -96,6 +99,13 @@ const DataTable = () => {
 
   const handleDelete = (id: string) => {
     setData(data.filter(item => item.id !== id));
+    toast.success("Record deleted successfully");
+  };
+
+  const handleEdit = (record: MotorData) => {
+    // Store the record data in sessionStorage to access it in the DataEntry page
+    sessionStorage.setItem('editRecord', JSON.stringify(record));
+    navigate('/data-entry');
   };
 
   const getSortIcon = (field: keyof MotorData) => {
@@ -120,7 +130,10 @@ const DataTable = () => {
             <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-industrial-gray" />
           </div>
           
-          <button className="ml-2 px-4 py-2 bg-industrial-light text-industrial-blue rounded-md flex items-center hover:bg-industrial-light/80 transition-colors">
+          <button 
+            className="ml-2 px-4 py-2 bg-industrial-light text-industrial-blue rounded-md flex items-center hover:bg-industrial-light/80 transition-colors hover:scale-105 duration-200"
+            onClick={() => navigate('/export-data')}
+          >
             <FileDown size={18} className="mr-2" />
             <span>Export</span>
           </button>
@@ -171,7 +184,12 @@ const DataTable = () => {
             {filteredData.length > 0 ? (
               filteredData.map((item) => (
                 <tr key={item.id} className="hover:bg-industrial-light/30 transition-colors">
-                  <td>{item.motorNumber}</td>
+                  <td>
+                    <div className="flex items-center">
+                      {item.motorNumber}
+                      <div className="ml-2 animate-pulse w-2 h-2 rounded-full bg-industrial-accent"></div>
+                    </div>
+                  </td>
                   <td>
                     <span className="block text-xs">Drive: {item.driveGearNumber}</span>
                     <span className="block text-xs">Driven: {item.drivenGearNumber}</span>
@@ -192,19 +210,14 @@ const DataTable = () => {
                   <td>
                     <div className="flex space-x-2">
                       <button 
-                        className="p-1 text-industrial-gray hover:text-industrial-accent transition-colors"
-                        title="View Details"
-                      >
-                        <Eye size={18} />
-                      </button>
-                      <button 
-                        className="p-1 text-industrial-gray hover:text-industrial-blue transition-colors"
+                        className="p-1 text-industrial-gray hover:text-industrial-blue transition-colors hover:scale-110 duration-200"
                         title="Edit"
+                        onClick={() => handleEdit(item)}
                       >
                         <Edit size={18} />
                       </button>
                       <button 
-                        className="p-1 text-industrial-gray hover:text-industrial-error transition-colors"
+                        className="p-1 text-industrial-gray hover:text-industrial-error transition-colors hover:scale-110 duration-200"
                         title="Delete"
                         onClick={() => handleDelete(item.id)}
                       >

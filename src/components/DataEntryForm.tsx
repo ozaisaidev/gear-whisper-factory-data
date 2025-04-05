@@ -1,7 +1,7 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Check, X, Upload, Mic } from 'lucide-react';
 import { toast } from "sonner";
+import { useNavigate } from 'react-router-dom';
 
 const rpmOptions = [500, 1500, 3000, 4500];
 
@@ -11,8 +11,23 @@ interface AudioFile {
   dbValue: string;
 }
 
+interface FormDataType {
+  motorNumber: string;
+  driveShaftNumber: string;
+  driveGearNumber: string;
+  drivenGearNumber: string;
+  vehicleSerialNumber: string;
+  vinNumber: string;
+  status: 'Good' | 'Not Good';
+  remarks: string;
+}
+
 const DataEntryForm = () => {
-  const [formData, setFormData] = useState({
+  const navigate = useNavigate();
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [recordId, setRecordId] = useState<string | null>(null);
+  
+  const [formData, setFormData] = useState<FormDataType>({
     motorNumber: '',
     driveShaftNumber: '',
     driveGearNumber: '',
@@ -26,6 +41,32 @@ const DataEntryForm = () => {
   const [audioFiles, setAudioFiles] = useState<AudioFile[]>(
     rpmOptions.map(rpm => ({ rpm, file: null, dbValue: '' }))
   );
+
+  useEffect(() => {
+    const editRecordJson = sessionStorage.getItem('editRecord');
+    if (editRecordJson) {
+      try {
+        const editRecord = JSON.parse(editRecordJson);
+        setFormData({
+          motorNumber: editRecord.motorNumber || '',
+          driveShaftNumber: editRecord.driveShaftNumber || '',
+          driveGearNumber: editRecord.driveGearNumber || '',
+          drivenGearNumber: editRecord.drivenGearNumber || '',
+          vehicleSerialNumber: editRecord.vehicleSerialNumber || '',
+          vinNumber: editRecord.vinNumber || '',
+          status: editRecord.status || 'Good',
+          remarks: editRecord.remarks || '',
+        });
+        setRecordId(editRecord.id);
+        setIsEditMode(true);
+        
+        sessionStorage.removeItem('editRecord');
+        toast.info("Editing record: " + editRecord.motorNumber);
+      } catch (error) {
+        console.error("Error parsing edit record", error);
+      }
+    }
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -55,9 +96,13 @@ const DataEntryForm = () => {
     e.preventDefault();
     console.log("Form Data:", formData);
     console.log("Audio Files:", audioFiles);
-    toast.success("Data submitted successfully!");
     
-    // Reset form after submission
+    if (isEditMode) {
+      toast.success("Record updated successfully!");
+    } else {
+      toast.success("Data submitted successfully!");
+    }
+    
     setFormData({
       motorNumber: '',
       driveShaftNumber: '',
@@ -70,13 +115,18 @@ const DataEntryForm = () => {
     });
     
     setAudioFiles(rpmOptions.map(rpm => ({ rpm, file: null, dbValue: '' })));
+    setIsEditMode(false);
+    setRecordId(null);
+    
+    navigate('/view-data');
   };
 
   const isComplete = () => {
     const requiredFields = ['motorNumber', 'driveGearNumber', 'drivenGearNumber', 'vehicleSerialNumber'];
     const hasRequiredFields = requiredFields.every(field => formData[field as keyof typeof formData]);
     
-    // Check if at least one audio file is uploaded
+    if (isEditMode) return hasRequiredFields;
+    
     const hasAudioFile = audioFiles.some(audio => audio.file !== null);
     
     return hasRequiredFields && hasAudioFile;
@@ -84,7 +134,9 @@ const DataEntryForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="industrial-card p-6 animate-fade-in">
-      <h2 className="text-xl font-bold text-industrial-blue mb-6">Motor & Gear Assembly Data</h2>
+      <h2 className="text-xl font-bold text-industrial-blue mb-6">
+        {isEditMode ? "Edit Motor & Gear Assembly Data" : "Motor & Gear Assembly Data"}
+      </h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
@@ -221,8 +273,6 @@ const DataEntryForm = () => {
                 type="button"
                 className="ml-2 p-2 bg-industrial-accent text-white rounded-md hover:bg-opacity-90 transition-colors"
                 onClick={() => {
-                  // This would trigger the actual recording functionality
-                  // For now, just showing a toast
                   toast.info(`Recording for ${audio.rpm} RPM would start here`);
                 }}
               >
@@ -250,11 +300,11 @@ const DataEntryForm = () => {
           disabled={!isComplete()}
           className={`px-6 py-3 rounded-md text-white font-medium ${
             isComplete()
-              ? "bg-industrial-blue hover:bg-opacity-90"
+              ? "bg-industrial-blue hover:bg-opacity-90 hover:scale-105 transition-transform"
               : "bg-industrial-gray/50 cursor-not-allowed"
           } transition-colors`}
         >
-          Submit Data
+          {isEditMode ? "Update Data" : "Submit Data"}
         </button>
       </div>
     </form>

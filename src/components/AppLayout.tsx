@@ -14,8 +14,9 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel
 } from '@/components/ui/sidebar';
-import { Database, FileText, Mic, LogIn, Home, User, LogOut } from 'lucide-react';
+import { Database, FileText, Mic, LogIn, Home, User, LogOut, FileUp, HelpCircle, Mail } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -47,7 +48,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
     },
     {
       name: 'Export Data',
-      icon: FileText,
+      icon: FileUp,
       path: '/export-data',
       color: 'text-sky-400'
     },
@@ -75,15 +76,20 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const handleLoginClick = () => {
     if (isLoggedIn) {
       setIsLoggedIn(false);
+      toast.info("Logged out successfully");
     } else {
       navigate('/login');
     }
   };
 
+  const handleContactHelp = () => {
+    toast.info("Please contact us at support@motoranalytics.com");
+  };
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-gray-50">
-        <Sidebar className="border-r border-gray-800/10 bg-modern-dark">
+        <Sidebar className="border-r border-gray-800/10 bg-modern-dark z-20">
           <SidebarHeader className="py-6">
             <div className="flex items-center justify-center">
               <motion.div
@@ -129,7 +135,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
                                 transition={{ duration: 0.3 }}
                               />
                             )}
-                            <item.icon className={`${location.pathname === item.path ? 'text-modern-primary' : item.color} transition-transform group-hover:scale-110`} />
+                            <item.icon 
+                              className={`${location.pathname === item.path ? 'text-modern-primary' : item.color} 
+                                transition-all group-hover:scale-110 drop-shadow-lg filter text-opacity-100 w-5 h-5`} 
+                            />
                             <span>{item.name}</span>
                           </Link>
                         </SidebarMenuButton>
@@ -141,7 +150,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             </SidebarGroup>
             
             <SidebarGroup>
-              <SidebarGroupLabel className="text-gray-400 text-xs uppercase tracking-wider px-4 py-2">Account</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-gray-400 text-xs uppercase tracking-wider px-4 py-2">Support</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <motion.div
@@ -153,13 +162,38 @@ export default function AppLayout({ children }: AppLayoutProps) {
                       <SidebarMenuButton asChild className="text-gray-400 hover:text-white">
                         <button 
                           className="w-full flex items-center group"
+                          onClick={handleContactHelp}
+                        >
+                          <HelpCircle className="text-blue-400 group-hover:scale-110 transition-transform drop-shadow-lg w-5 h-5" />
+                          <span>Contact / Help</span>
+                        </button>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </motion.div>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            
+            <SidebarGroup>
+              <SidebarGroupLabel className="text-gray-400 text-xs uppercase tracking-wider px-4 py-2">Account</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7, duration: 0.5 }}
+                  >
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild className="text-gray-400 hover:text-white">
+                        <button 
+                          className="w-full flex items-center group"
                           onClick={handleLoginClick}
                         >
                           <div className="relative">
                             {isLoggedIn ? (
-                              <LogOut className="text-red-400 group-hover:scale-110 transition-transform" />
+                              <LogOut className="text-red-400 group-hover:scale-110 transition-transform drop-shadow-lg w-5 h-5" />
                             ) : (
-                              <User className="text-modern-primary group-hover:scale-110 transition-transform" />
+                              <User className="text-modern-primary group-hover:scale-110 transition-transform drop-shadow-lg w-5 h-5" />
                             )}
                             {isLoggedIn && (
                               <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full"></span>
@@ -178,12 +212,23 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <SidebarFooter className="mt-auto">
             <div className="p-4 text-center text-xs text-gray-500">
               <p>v1.0.0</p>
-              <p>© 2023 Factory Solutions</p>
+              <p>© 2025 Motor Analytics</p>
             </div>
           </SidebarFooter>
         </Sidebar>
         
         <div className="flex-1">
+          <div className="flex justify-end p-4 bg-white shadow-sm">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/export-data')}
+              className="flex items-center px-4 py-2 bg-modern-primary text-white font-medium rounded-lg hover:bg-opacity-90 transition-colors shadow-sm"
+            >
+              <FileUp size={18} className="mr-2" />
+              <span>Export Data</span>
+            </motion.button>
+          </div>
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}

@@ -1,156 +1,130 @@
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Lock, Eye, EyeOff } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Lock, Mail, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
+import LoadingWave from '@/components/LoadingWave';
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [credentials, setCredentials] = useState({
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setCredentials((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
-    // For demo purposes, we'll accept any valid-looking email/password
-    if (credentials.email && credentials.password.length >= 6) {
-      // In a real app, you would validate credentials against a backend
-      toast.success('Login successful!');
-      
-      // Simulate successful login and redirect
-      setTimeout(() => {
-        navigate('/');
-      }, 1000);
-    } else {
-      toast.error('Invalid credentials. Email required and password must be at least 6 characters.');
-    }
+    // Simulate API call
+    setTimeout(() => {
+      setIsLoading(false);
+      toast.success("Login successful");
+      navigate('/');
+    }, 1500);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-modern-dark to-modern-dark/70 p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden"
       >
-        <div className="text-center mb-8">
-          <motion.div
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-modern-primary/10 p-4 rounded-full inline-flex mb-4"
-          >
-            <User size={32} className="text-modern-primary" />
-          </motion.div>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
-          <p className="text-gray-500 mt-2">Log in to access the Motor Analytics Dashboard</p>
-        </div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100"
-        >
+        <div className="p-8">
+          <div className="text-center mb-8">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="flex justify-center mb-4"
+            >
+              <div className="bg-modern-primary/10 p-3 rounded-full">
+                <Lock size={28} className="text-modern-primary" />
+              </div>
+            </motion.div>
+            <h1 className="text-2xl font-bold text-gray-800">Motor Analytics</h1>
+            <p className="text-gray-500 mt-1">Sign in to your account</p>
+          </div>
+          
           <form onSubmit={handleSubmit}>
-            <div className="space-y-6">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email Address
-                </label>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Email Address</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User size={18} className="text-gray-400" />
-                  </div>
                   <input
-                    id="email"
-                    name="email"
                     type="email"
-                    autoComplete="email"
+                    name="email"
                     required
-                    value={credentials.email}
+                    value={formData.email}
                     onChange={handleInputChange}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-modern-primary/20 focus:border-modern-primary transition-colors"
-                    placeholder="you@example.com"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-modern-primary/50 focus:border-modern-primary outline-none transition-colors"
+                    placeholder="email@example.com"
                   />
+                  <Mail size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 </div>
               </div>
               
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                  Password
-                </label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Password</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock size={18} className="text-gray-400" />
-                  </div>
                   <input
-                    id="password"
+                    type="password"
                     name="password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="current-password"
                     required
-                    value={credentials.password}
+                    value={formData.password}
                     onChange={handleInputChange}
-                    className="block w-full pl-10 pr-10 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-modern-primary/20 focus:border-modern-primary transition-colors"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-modern-primary/50 focus:border-modern-primary outline-none transition-colors"
                     placeholder="••••••••"
                   />
-                  <button
-                    type="button"
-                    onClick={toggleShowPassword}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  >
-                    {showPassword ? (
-                      <EyeOff size={18} className="text-gray-400 hover:text-gray-600" />
-                    ) : (
-                      <Eye size={18} className="text-gray-400 hover:text-gray-600" />
-                    )}
-                  </button>
-                </div>
-                <div className="text-right mt-2">
-                  <a href="#" className="text-sm text-modern-primary hover:underline">
-                    Forgot password?
-                  </a>
+                  <Lock size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 </div>
               </div>
-              
-              <div>
-                <button
-                  type="submit"
-                  className="w-full py-3 bg-modern-primary text-white rounded-lg hover:bg-opacity-90 transition-colors shadow-sm hover:shadow-md flex items-center justify-center"
-                >
-                  Sign in
-                </button>
-              </div>
+            </div>
+            
+            <div className="mt-8">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-modern-primary text-white font-medium py-2 rounded-lg hover:bg-opacity-90 transition-colors flex items-center justify-center"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className="h-6 scale-75">
+                    <LoadingWave />
+                  </div>
+                ) : (
+                  <>
+                    <span>Sign In</span>
+                    <ArrowRight size={16} className="ml-2" />
+                  </>
+                )}
+              </motion.button>
             </div>
           </form>
           
-          <div className="mt-6 text-center text-sm text-gray-500">
-            <p>
-              Don't have an account?{' '}
-              <a href="#" className="text-modern-primary hover:underline font-medium">
-                Create an account
-              </a>
-            </p>
+          <div className="mt-6 text-center">
+            <button 
+              className="text-modern-primary hover:underline text-sm"
+              onClick={() => navigate('/')}
+            >
+              Return to Dashboard
+            </button>
           </div>
-        </motion.div>
+        </div>
+        
+        <div className="py-4 bg-gray-50 border-t border-gray-100 text-center">
+          <p className="text-xs text-gray-500">© 2025 Motor Analytics. All rights reserved.</p>
+        </div>
       </motion.div>
     </div>
   );
