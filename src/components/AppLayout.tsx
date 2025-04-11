@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   SidebarProvider, 
@@ -26,6 +26,12 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  
+  // Check login status on component mount
+  useEffect(() => {
+    const loginStatus = localStorage.getItem('loggedIn');
+    setIsLoggedIn(!!loginStatus);
+  }, []);
   
   const menuItems = [
     {
@@ -75,7 +81,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
   const handleLoginClick = () => {
     if (isLoggedIn) {
-      // New logout logic
+      // Logout logic
       localStorage.removeItem('loggedIn');
       setIsLoggedIn(false);
       toast.info('Logged out successfully');
