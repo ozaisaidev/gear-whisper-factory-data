@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -74,8 +75,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
   const handleLoginClick = () => {
     if (isLoggedIn) {
+      // New logout logic
+      localStorage.removeItem('loggedIn');
       setIsLoggedIn(false);
-      toast.info("Logged out successfully");
+      toast.info('Logged out successfully');
       navigate('/login');
     } else {
       navigate('/login');
