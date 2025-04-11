@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -77,6 +76,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
     if (isLoggedIn) {
       setIsLoggedIn(false);
       toast.info("Logged out successfully");
+      navigate('/login');
     } else {
       navigate('/login');
     }
@@ -218,7 +218,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         </Sidebar>
         
         <div className="flex-1">
-          <div className="flex justify-end p-4 bg-white shadow-sm">
+          <div className="flex justify-end gap-4 p-4 bg-white shadow-sm">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -227,6 +227,16 @@ export default function AppLayout({ children }: AppLayoutProps) {
             >
               <FileUp size={18} className="mr-2" />
               <span>Export Data</span>
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleLoginClick}
+              className="flex items-center px-4 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition-colors shadow-sm"
+            >
+              <LogOut size={18} className="mr-2" />
+              <span>{isLoggedIn ? 'Logout' : 'Login'}</span>
             </motion.button>
           </div>
           <AnimatePresence mode="wait">
